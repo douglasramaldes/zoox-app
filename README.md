@@ -15,6 +15,6 @@ npm start
 
 #Observações
 Caso você tenha rodado o seed do módulo da API 
-para efetuar o login é utilize os seguintes dados
+para efetuar o login utilize os seguintes dados
 usuário:admin@gmail.com
 senha:admin 
