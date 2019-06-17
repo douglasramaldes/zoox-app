@@ -1,0 +1,162 @@
+﻿<div class="container">
+    <div class="reglist">
+        <button [routerLink]="['/login']" type="button" class="btn btn-info btn-sm">
+            <span class=""></span> Log out
+        </button>
+        <table class="table table-striped" [mfData]="states | dataFilter : {name: searchText, abbreviation:searchText,  created_at: searchText}"
+            #mf="mfDataTable" [mfRowsOnPage]="5">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>
+                        <mfDefaultSorter by="name">Estado</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="abbreviation">Abreviação</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="created_at">Criado</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="updated_at">Alterado</mfDefaultSorter>
+                    </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th colspan="5">
+                        Filtro:
+                        <input [(ngModel)]="searchText" placeholder="Digite aqui.." class="advancedSearchTextbox" />
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let state of mf.data; let i = index">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ state.name }}</td>
+                    <td>{{ state.abbreviation }}</td>
+                    <td>{{ state.created_at}}</td>
+                    <td>{{ state.updated_at }}</td>
+                    <td>
+                        <button type="button" class="btn btn-info" (click)="onEditState(i)">Editar</button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" (click)="onDeleteState(state._id, i)">Deletar</button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" (click)="onNewState()">Criar Estado</button>
+        </div>
+    </div>
+    <br>
+    <div class="regentry" *ngIf="showNewState">
+        <form (ngSubmit)="onSaveState()">
+            <div class="form-group row">
+                <label for="firstname-input" class="col-2 col-form-label">Estado</label>
+                <div class="col-10">
+                    <input placeholder="*Campo obrigatório" class="form-control" type="text" [(ngModel)]="stateModel.name"
+                        name="firstName">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lastname-input" class="col-2 col-form-label">Abreviação</label>
+                <div class="col-10">
+                    <input class="form-control" type="text" [(ngModel)]="stateModel.abbreviation" name="lastName">
+                </div>
+            </div>
+            <button *ngIf="stateModel.name" type="submit" class="btn btn-success">{{submitType}}</button>
+            <button type="submit" class="btn btn-primary" (click)="onCancelState()">Cancelar</button>
+        </form>
+    </div>
+    <div class="reglist">
+        <table class="table table-striped" class="table table-striped" [mfData]="cities | dataFilter : {name: searchTextCities}"
+            #ms="mfDataTable" [mfRowsOnPage]="5">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>
+                        <mfDefaultSorter by="name">Cidade</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="state.name">Estado</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="created_at">Criado</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="updated_at">Alterado</mfDefaultSorter>
+                    </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th colspan="5">
+                        Filtro:
+                        <input [(ngModel)]="searchTextCities" placeholder="Digite o nome da cidade" class="advancedSearchTextbox" />
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let city of ms.data; let i = index">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ city.name }}</td>
+                    <td>{{ city.state?.name }}</td>
+                    <td>{{ city.created_at }}</td>
+                    <td>{{ city.updated_at }}</td>
+                    <td>
+                        <button type="button" class="btn btn-info" (click)="onEditCity(city.state?.name,city.state?._id, i)">Editar</button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" (click)="onDeleteCity(city._id,i)">Deletar</button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" (click)="onNewCity()">Criar Cidade</button>
+        </div>
+    </div>
+    <br>
+    <div class="regentry" *ngIf="showNewCity">
+        <form (ngSubmit)="onSaveCity()">
+            <div class="form-group row">
+                <label for="firstname-input" class="col-2 col-form-label">Cidade</label>
+                <div class="col-10">
+                    <input placeholder="*Campo obrigatório" class="form-control" type="text" [(ngModel)]="cityModel.name"
+                        name="Name">
+                </div>
+            </div>
+            <div *ngIf="states.length > 0" class="form-group row">
+                <label for="city-input" class="col-2 col-form-label">Estado</label>
+                <div class="col-10 dropdown" ngbDropdown myDrop="ngbDropdown">
+                    <button type="button" class="btn btn-outline-primary" id="dropdownManual" name="state"
+                        ngbDropdownToggle>{{cityModel.state}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownManual">
+                        <button type="button" class="dropdown-item" *ngFor="let state of states" (click)="onChangeState(state.name, state._id)">{{state.name}}</button>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="states.length === 0" class="form-group row">
+                <label for="city-input" class="col-6">Não há estado cadastrado</label>
+            </div>
+            <button *ngIf="cityModel.name" type="submit" class="btn btn-success">{{submitType}}</button>
+            <button type="submit" class="btn btn-primary" (click)="onCancelCity()">Cancelar</button>
+        </form>
+    </div>
+</div>
